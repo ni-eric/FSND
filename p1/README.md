@@ -1,4 +1,6 @@
 ## Project 1 - Full Stack Web Developer Nanodegree
+by Eric Ni, in fulfillment of Udacity's [Full-Stack Web Developer Nanodegree](https://www.udacity.com/course/nd004)
+
 
 A simple server side application that stores a list of my favorite movies with its poster/trailer, used to serve a static HTML web page displaying these movies.
 
