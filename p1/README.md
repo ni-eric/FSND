@@ -2,6 +2,8 @@
 
 A simple server side application that stores a list of my favorite movies with its poster/trailer, used to serve a static HTML web page displaying these movies.
 
+####Demo:
+[Demo](https://rawgit.com/nihaitian/FSND/master/p1/fresh_tomatoes.html)
 
 ####Requires:
 [Python 2.7](https://www.python.org/download/releases/2.7.7/)
