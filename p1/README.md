@@ -10,7 +10,7 @@ A simple server side application that stores a list of my favorite movies with i
 ```bash
 #clone this repo
 git clone https://github.com/nihaitian/FSND.git
-cd p1
+cd FSND/p1
 #execute script
 python entertainment_center.py
 ```
