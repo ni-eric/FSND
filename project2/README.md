@@ -4,7 +4,9 @@ by Eric Ni, in fulfillment of Udacity's [Full-Stack Web Developer Nanodegree](ht
 
 ####Requires:
 [Vagrant](http://www.vagrantup.com/)
+
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
 [Python 2.7](https://www.python.org/download/releases/2.7.7/)
 
 
