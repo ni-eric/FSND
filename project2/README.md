@@ -1,14 +1,18 @@
 ## Project 2 - Full Stack Web Developer Nanodegree
 by Eric Ni, in fulfillment of Udacity's [Full-Stack Web Developer Nanodegree](https://www.udacity.com/course/nd004)
 
+A database schema for a swiss-system tournament that tracks players, matches, and standings.
+
 
 ####Requires:
 [Vagrant](http://www.vagrantup.com/)
+
 [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
 [Python 2.7](https://www.python.org/download/releases/2.7.7/)
 
 
-####Running this program:
+####Usage:
 ```bash
 #clone this repo
 git clone https://github.com/nihaitian/FSND.git
