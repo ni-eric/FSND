@@ -17,7 +17,6 @@ def deleteMatches():
     c = conn.cursor()
 
     c.execute("DELETE FROM matches;")
-    print "cleared matches"
 
     conn.commit()
     c.close()
@@ -30,7 +29,6 @@ def deletePlayers():
     c = conn.cursor()
 
     c.execute("DELETE FROM players;")
-    print "cleared players"
 
     conn.commit()
     c.close()
@@ -49,7 +47,6 @@ def countPlayers():
     c.close()
     conn.close()
 
-    print "#players:", result
     return result
 
 
@@ -66,7 +63,6 @@ def registerPlayer(name):
     c = conn.cursor()
 
     c.execute("INSERT INTO players(name) VALUES(%s);", (name,))
-    print "registered player", name
 
     conn.commit()
     c.close()
@@ -91,7 +87,6 @@ def playerStandings():
 
     c.execute("SELECT * FROM standings;")
     result = c.fetchall()
-    print "get standings"
 
     conn.commit()
     c.close()
@@ -112,7 +107,6 @@ def reportMatch(winner, loser):
 
     c.execute(
         "INSERT INTO matches(winner, loser) VALUES(%s, %s);", (winner, loser))
-    print "registered match between", winner, "and", loser
 
     conn.commit()
     c.close()
@@ -144,7 +138,6 @@ def swissPairings():
         c.execute("SELECT id, name FROM standings LIMIT 1 OFFSET %s", (2*i+1,))
         result.append(temp+c.fetchone())
 
-    print result
     conn.commit()
     c.close()
     conn.close()

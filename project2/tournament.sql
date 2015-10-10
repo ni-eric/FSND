@@ -10,14 +10,14 @@ CREATE DATABASE tournament;
 
 -- create players and matches table
 CREATE TABLE players(
-	id serial PRIMARY KEY, 
-	name text);
+  id serial PRIMARY KEY, 
+  name text);
 
 
 CREATE TABLE matches(
-	id serial PRIMARY KEY, 
-	winner int REFERENCES players, 
-	loser int REFERENCES players);
+  id serial PRIMARY KEY, 
+  winner int REFERENCES players, 
+  loser int REFERENCES players);
 
 
 -- wincount queries number of wins for each player 
