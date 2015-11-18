@@ -1,1 +1,1 @@
-Place your catalog project in this directory.
+project in progress~
