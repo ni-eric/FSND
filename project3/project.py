@@ -13,26 +13,51 @@ def connect():
         print("Could not connect to database.")
 
 def addItem(name, category, description):
-	db, c = connect()
+    db, c = connect()
 
-	query = "INSERT INTO items(name, category, description) VALUES(%s, %s, %s);"
-	param = (name, category, description)
-	c.execute(query, param)
+    query = "INSERT INTO items(name, category, description) VALUES(%s, %s, %s);"
+    param = (name, category, description)
+    c.execute(query, param)
 
-	db.commit()
-	c.close()
-	db.close()
+    db.commit()
+    c.close()
+    db.close()
 
 def removeItem(id):
-	db, c = connect()
+    db, c = connect()
 
-	query = "DELETE FROM items WHERE id=%s"
-	param = (id,)
-	c.execute(query, param)
+    query = "DELETE FROM items WHERE id=%s"
+    param = (id,)
+    c.execute(query, param)
 
-	db.commit()
-	c.close()
-	db.close()
+    db.commit()
+    c.close()
+    db.close()
+
+def clearDatabase():
+    db, c = connect()
+
+    query = "TRUNCATE items"
+    c.execute(query)
+
+    db.commit()
+    c.close()
+    db.close()
+
+
+
+@app.route('/items')
+def displayItems():
+    db, c = connect()
+    
+    query = "SELECT * FROM items"
+    c.execute(query)
+    result = c.fetchall()
+    output = ''
+    for i in result:
+        output += str(i)
+        output += '</br>'
+    return output
 
 
 @app.route('/')
