@@ -1,7 +1,6 @@
-
-<html>
-
-<body>
+{% extends 'base.html' %}
+{% block title %} {{item.name}} {% endblock %}
+{% block content %}
 
 <h1>{{item.name}}</h1>
 
@@ -14,10 +13,9 @@
 <p>{{item.description}}</p>
 
 <a href = '{{url_for('deleteItem', itemid = item.id, category = item.category)}}'> delete </a>
+<a href = '{{url_for('editItem', itemid = item.id, category = item.category)}}'> delete </a>
 
 </div>
 
 
-</body>
-
-</html>
+{% endblock %}

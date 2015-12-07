@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2
 from collections import namedtuple
 
@@ -27,7 +27,7 @@ def addItem(name, category, description):
     c.close()
     db.close()
 
-def editItem(id, name, category, description):
+def edit_itemDB(id, name, category, description):
     db, c = connect()
 
     query = "UPDATE items SET name = %s, category = %s, description = %s WHERE id = %s"
@@ -37,7 +37,7 @@ def editItem(id, name, category, description):
     c.close()
     db.close()
 
-def removeItem(id):
+def delete_itemDB(id):
     # remove an item based on its unique id from the item table
     db, c = connect()
 
@@ -48,7 +48,6 @@ def removeItem(id):
     db.commit()
     c.close()
     db.close()
-
 
 def clearDatabase():
     # delete all items from item table.
@@ -62,6 +61,28 @@ def clearDatabase():
     c.close()
     db.close()
 
+def getCategories():
+    db, c = connect()
+    query = "SELECT DISTINCT category FROM items ORDER BY category"
+    c.execute(query)
+    categories = c.fetchall()
+
+    c.close()
+    db.close()
+    return categories
+
+def getItem(itemid):
+    db, c = connect()
+
+    Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
+    query = "SELECT * FROM items WHERE id=%s"
+    param = (itemid,)
+    c.execute(query, param)
+    item = Item(*c.fetchone())
+
+    c.close()
+    db.close()
+    return item
 
 @app.route('/items')
 def displayItems():
@@ -73,11 +94,13 @@ def displayItems():
     items = c.fetchall()
     nameditems = [Item(*i) for i in items]
 
+    c.close()
+    db.close()
     return render_template('items.html', items=nameditems)
 
 @app.route('/catalog/<category>')
 def categoryItems(category):
-    
+
     db, c = connect()
 
     Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
@@ -87,35 +110,47 @@ def categoryItems(category):
     items = c.fetchall()
     nameditems = [Item(*i) for i in items]
 
-    return render_template('categoryitems.html', items=nameditems, category=category)
+    c.close()
+    db.close()
+    return render_template('categoryitems.html', items=nameditems, category=category, categories=getCategories())
 
-@app.route('/catalog/<int:itemid>/<name>')
-def item(itemid, name):
+@app.route('/catalog/<category>/<int:itemid>')
+@app.route('/catalog/<category>/<int:itemid>/<name>')
+def item(itemid, name, category):
     # I want to allow for multiple items with the same name
-    db, c = connect()
+    return render_template('item.html', item=getItem(itemid), categories=getCategories())
 
-    Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
-    query = "SELECT * FROM items WHERE id=%s"
-    param = (itemid,)
-    c.execute(query, param)
-    item = Item(*c.fetchone())
 
-    return render_template('item.html', item=item)
+@app.route('/catalog/<category>/<int:itemid>/edit', methods=['GET', 'POST'])
+def editItem(itemid, category):
+    if(request.method == 'POST'):
+        item = getItem(itemid)
+        if request.form['name']:
+            item.name = request.form['name']
+        if request.form['description']:
+            item.description = request.form['description']
+        edit_itemDB(itemid, item.name, item.category, item.description)
+        return redirect(url_for('categoryItems', category=category))
+    else:
+        return render_template('editconfirmation.html', itemid=itemid, category=category)
+
 
 @app.route('/catalog/<category>/<int:itemid>/delete', methods=['GET', 'POST'])
 def deleteItem(itemid, category):
     if(request.method == 'POST'):
-        removeItem(itemid)
+        delete_itemDB(itemid)
+        flash('item successfully deleted')
         return redirect(url_for('categoryItems', category=category))
     else:
-        return render_template('deleteconfirmation.html', itemid=itemid, category=category)
+        return render_template('deleteconfirmation.html', itemid=itemid, category=category, categories=getCategories())
 
 
 @app.route('/')
-@app.route('/hello')
+@app.route('/catalog')
 def HelloWorld():
-    return "Hello World"
+    return render_template('catalog.html', categories=getCategories())
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
