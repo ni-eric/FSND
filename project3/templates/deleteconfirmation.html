@@ -2,7 +2,7 @@
 {% block title %} Catalog - Delete Item {% endblock %}
 
 {% block content %}
-<h1> Are you sure you want to delete {{itemid}} from {{category}}? </h1>
+<h1> Are you sure you want to delete? </h1>
 
 <form action='{{ url_for('deleteItem',itemid =itemid, category = category)}}' method = 'post'>
 

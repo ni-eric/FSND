@@ -15,17 +15,20 @@ def connect():
         print("Could not connect to database.")
 
 
-def addItem(name, category, description):
+def add_ItemDB(name, category, description):
     # adds a new item to the item table
     db, c = connect()
 
-    query = "INSERT INTO items(name, category, description) VALUES(%s, %s, %s);"
+    query = "INSERT INTO items(name, category, description) VALUES(%s, %s, %s) RETURNING id;"
     param = (name, category, description)
     c.execute(query, param)
+    itemid = c.fetchone()[0]
 
     db.commit()
     c.close()
     db.close()
+
+    return itemid
 
 def edit_itemDB(id, name, category, description):
     db, c = connect()
@@ -123,16 +126,21 @@ def item(itemid, name, category):
 
 @app.route('/catalog/<category>/<int:itemid>/edit', methods=['GET', 'POST'])
 def editItem(itemid, category):
+    item = getItem(itemid)
+    newname, newcat, newdesc = item.name, item.category, item.description
     if(request.method == 'POST'):
-        item = getItem(itemid)
         if request.form['name']:
-            item.name = request.form['name']
+            newname = request.form['name']
         if request.form['description']:
-            item.description = request.form['description']
-        edit_itemDB(itemid, item.name, item.category, item.description)
+            newdesc = request.form['description']
+        if request.form['category']:
+            newcat = request.form['category']
+        edit_itemDB(itemid, newname, newcat, newdesc)
+        flash('item successfully edited')
+        # redirect to the old category after editing, if it changed
         return redirect(url_for('categoryItems', category=category))
     else:
-        return render_template('editconfirmation.html', itemid=itemid, category=category)
+        return render_template('editconfirmation.html', item = item, categories=getCategories())
 
 
 @app.route('/catalog/<category>/<int:itemid>/delete', methods=['GET', 'POST'])
@@ -144,10 +152,27 @@ def deleteItem(itemid, category):
     else:
         return render_template('deleteconfirmation.html', itemid=itemid, category=category, categories=getCategories())
 
+@app.route('/catalog/addItem', methods=['GET', 'POST'])
+def addItem():
+    if(request.method == 'POST'):
+        newname, newcat, newdesc = "", "", ""
+        if request.form['name']:
+            newname = request.form['name']
+        if request.form['category']:
+            newcat = request.form['category']
+        if request.form['description']:
+            newdesc = request.form['description']
+        itemid = add_ItemDB(newname, newcat, newdesc)
+        print itemid, newname, newcat
+        # redirect to newly created item
+        return redirect(url_for('item', itemid=itemid, name=newname, category=newcat))
+    else:
+        return render_template('addnewitem.html', categories=getCategories())
+
 
 @app.route('/')
 @app.route('/catalog')
-def HelloWorld():
+def catalogHome():
     return render_template('catalog.html', categories=getCategories())
 
 if __name__ == '__main__':

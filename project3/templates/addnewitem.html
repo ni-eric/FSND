@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %} Catalog - Edit Item {% endblock %}
+{% block title %} Catalog - Add Item {% endblock %}
 {% block content %}
-	<h1> Edit Item</h1>
-	<form action='{{ url_for('editItem',itemid =item.id, category = item.category)}}' method = 'post'>
+	<h1> Add New Item </h1>
+	<form action='{{ url_for('addItem')}}' method = 'post'>
 		<div class = 'form-input'>
 			<label for="inputName">Name</label>
-			<input type = 'text' class="form-control" name = 'name' value = {{item.name}} id = 'inputName'>
+			<input type = 'text' class="form-control" name = 'name' placeholder = 'name' id = 'inputName'>
 		</div>
 		<div class = 'form-input'>
 			<!-- TODO: allow users the option of creating a new category -->
@@ -18,9 +18,10 @@
 		</div>
 		<div class = 'form-input'>
 			<label for="inputDescription">Description</label>
-			<textarea rows = 4 type = 'form-control' id = 'inputDescription' name = 'description'>{{ item.description }}</textarea>
+			<textarea rows = 4 type = 'form-control' id = 'inputDescription' name = 'description'>description</textarea>
 		</div>
 		<input type='submit', value = 'Submit'>
 	</form>
-	<a href = '{{ url_for('categoryItems', category = item.category)}}'> Cancel </a>
-{% endblock %}
+	<!-- TODO: link to previously visited page instead, if valid -->
+	<a href = '{{ url_for('catalogHome')}}'> Cancel </a>
+{% endblock %}a
