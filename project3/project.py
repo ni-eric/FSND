@@ -15,12 +15,12 @@ def connect():
         print("Could not connect to database.")
 
 
-def add_ItemDB(name, category, description):
+def add_ItemDB(name, category, description, imgurl):
     # adds a new item to the item table
     db, c = connect()
 
-    query = "INSERT INTO items(name, category, description) VALUES(%s, %s, %s) RETURNING id;"
-    param = (name, category, description)
+    query = "INSERT INTO items(name, category, description, imgurl) VALUES(%s, %s, %s, %s) RETURNING id;"
+    param = (name, category, description, imgurl)
     c.execute(query, param)
     itemid = c.fetchone()[0]
 
@@ -30,11 +30,11 @@ def add_ItemDB(name, category, description):
 
     return itemid
 
-def edit_itemDB(id, name, category, description):
+def edit_itemDB(id, name, category, description, imgurl):
     db, c = connect()
 
-    query = "UPDATE items SET name = %s, category = %s, description = %s WHERE id = %s"
-    param = (name, category, description, id)
+    query = "UPDATE items SET name = %s, category = %s, description = %s, imgurl = %s WHERE id = %s"
+    param = (name, category, description, imgurl, id)
     c.execute(query, param)
     db.commit()
     c.close()
@@ -77,7 +77,7 @@ def getCategories():
 def getItem(itemid):
     db, c = connect()
 
-    Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
+    Item = namedtuple('Item', ['id', 'name', 'category', 'description', 'imgurl'])
     query = "SELECT * FROM items WHERE id=%s"
     param = (itemid,)
     c.execute(query, param)
@@ -87,26 +87,12 @@ def getItem(itemid):
     db.close()
     return item
 
-@app.route('/items')
-def displayItems():
-    db, c = connect()
-
-    Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
-    query = "SELECT * FROM items"
-    c.execute(query)
-    items = c.fetchall()
-    nameditems = [Item(*i) for i in items]
-
-    c.close()
-    db.close()
-    return render_template('items.html', items=nameditems)
-
 @app.route('/catalog/<category>')
 def categoryItems(category):
 
     db, c = connect()
 
-    Item = namedtuple('Item', ['id', 'name', 'category', 'description'])
+    Item = namedtuple('Item', ['id', 'name', 'category', 'description', 'imgurl'])
     query = "SELECT * FROM items WHERE category=%s"
     param = (category,)
     c.execute(query, param)
@@ -135,7 +121,9 @@ def editItem(itemid, category):
             newdesc = request.form['description']
         if request.form['category']:
             newcat = request.form['category']
-        edit_itemDB(itemid, newname, newcat, newdesc)
+        if request.form['imgurl']:
+            newimg = request.form['imgurl']
+        edit_itemDB(itemid, newname, newcat, newdesc, newimg)
         flash('item successfully edited')
         # redirect to the old category after editing, if it changed
         return redirect(url_for('categoryItems', category=category))
@@ -155,14 +143,16 @@ def deleteItem(itemid, category):
 @app.route('/catalog/addItem', methods=['GET', 'POST'])
 def addItem():
     if(request.method == 'POST'):
-        newname, newcat, newdesc = "", "", ""
+        newname, newcat, newdesc, imgurl = "", "", "", ""
         if request.form['name']:
             newname = request.form['name']
         if request.form['category']:
             newcat = request.form['category']
         if request.form['description']:
             newdesc = request.form['description']
-        itemid = add_ItemDB(newname, newcat, newdesc)
+        if request.form['imgurl']:
+            newimg = request.form['imgurl']
+        itemid = add_ItemDB(newname, newcat, newdesc, newimg)
         print itemid, newname, newcat
         # redirect to newly created item
         return redirect(url_for('item', itemid=itemid, name=newname, category=newcat))

@@ -16,6 +16,23 @@
     }
 }
 
+.flex-image {
+  display: block;
+  margin-bottom: 0px;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  height: auto;
+}
+
+.flex-item {
+  width: 300px;
+  height: auto;
+}
+
 textarea {
     width: 500px;
     height: 200px;
