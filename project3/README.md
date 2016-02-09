@@ -1,7 +1,7 @@
 ## Project 2 - Full Stack Web Developer Nanodegree
 by Eric Ni, in fulfillment of Udacity's [Full-Stack Web Developer Nanodegree](https://www.udacity.com/course/nd004)
 
-A Catalog Application that provides categories of items, which have names, descriptions, and images. Provided is a user registration/authenication system via Google+, and logged in users are able to add, delete, and edit items.
+A Catalog Application that provides categories of items, which have names, descriptions, and images. Provided is a user registration/authenication system via Google+. Logged in users are able to add, delete, and edit items.
 
 Frontend design utilizes the Bootstrap framework, and backend uses PostgreSQL to manage the database.
 
@@ -27,7 +27,6 @@ cd /vagrant
 # initialize a database with placeholder categories, items, and images
 python initialize.py
 
-# run tests
+# start the webserver on http://localhost:5000
 python project.py
-# visit http://localhost:5000 from your browser
 ```
