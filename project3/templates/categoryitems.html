@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 {% block title %} {{category}} {% endblock %}
-
 {% block content %}
 <h1>{{category}}</h1>
-
 <div class='flex-container'>
-{% for i in items %}
-<div class='flex-item'>
-<a href= "{{url_for("item", itemid=i.id, name = i.name, category=i.category)}}">
-	<img src={{i.imgurl}} class='img-thumbnail flex-image' alt={{i.name}}> </a>
-<a href= "{{url_for("item", itemid=i.id, name = i.name, category=i.category)}}">{{i.name}}</a>
+    {% for i in items %}
+    <div class='flex-item'>
+        <a href="{{url_for(" item ", itemid=i.id, name = i.name, category=i.category)}}">
+            <img src={{i.imgurl}} class='img-thumbnail flex-image' alt={{i.name}}> </a>
+        <a href="{{url_for(" item ", itemid=i.id, name = i.name, category=i.category)}}">{{i.name}}</a>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
-</div>
-
 {% endblock %}

@@ -6,11 +6,11 @@
 
 
 <div>
+	<img src={{item.imgurl}} alt={{item.name}}>
+	<p>{{item.description}}</p>
 
-<p>{{item.description}}</p>
-
-<a href = '{{url_for('editItem', itemid = item.id, category = item.category)}}' class="btn btn-default">edit </a>
-<a href = '{{url_for('deleteItem', itemid = item.id, category = item.category)}}' class="btn btn-default"> delete </a>
+	<a href = '{{url_for('editItem', itemid = item.id, category = item.category)}}' class="btn btn-default">edit </a>
+	<a href = '{{url_for('deleteItem', itemid = item.id, category = item.category)}}' class="btn btn-default"> delete </a>
 
 
 </div>

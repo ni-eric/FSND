@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset='utf-8'>
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>{% block title %} Catalog {% endblock %}</title>
-		<link rel=stylesheet type=text/css href='{{ url_for('static', filename='css/bootstrap.min.css') }}'>
-		<link rel=stylesheet type=text/css href='{{ url_for('static', filename='catalog.css') }}'>
-	</head>
-	<body>
-
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-
-				{% for i in categories %}
-						<li><a href= '{{url_for('categoryItems', category=i[0])}}'>{{i[0]}}</a></li>
-				{% endfor %}
-						<hr>
-						<li><a href= '{{url_for('addItem')}}'>Add new Item</a></li>
-          </ul>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <title>{% block title %} Catalog {% endblock %}</title>
+        <link rel=stylesheet type=text/css href='{{ url_for('static', filename='css/bootstrap.min.css') }}'>
+        <link rel=stylesheet type=text/css href='{{ url_for('static', filename='catalog.css') }}'>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+        <script src='//apis.google.com/js/platform.js?onload=start'> </script>
+    </head>
+    <body>
+        <nav class='navbar navbar-inverse'>
+            <div class='container-fluid'>
+                <div class='navbar-header'>
+                    <li class='navbar-brand'>Catalog App</li>
+                </div>
+                <ul class='nav navbar-nav'>
+                    <li class='active'><a href='{{url_for('catalogHome')}}'>Home</a></li>
+                </ul>
+                <ul class='nav navbar-nav navbar-right'>
+                    <li><a href='{{url_for('login')}}'><span class='glyphicon glyphicon-log-in'></span>Login</a></li>
+                    <li><a href='{{url_for('gdisconnect')}}'><span class='glyphicon glyphicon-log-out'></span>Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class='container-fluid'>
+            <div class='row'>
+                <div class='col-sm-3 col-md-2 sidebar'>
+                    <ul class='nav nav-sidebar'>
+                        {% for i in categories %}
+                            <li><a href= '{{url_for('categoryItems', category=i[0])}}'>{{i[0]}}</a></li>
+                        {% endfor %}
+                        <hr>
+                        <li><a href= '{{url_for('addItem')}}'>Add new Item</a></li>
+                    </ul>
+                </div>
+                <div class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main'>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                {% block content %} default content {% endblock %}
+            </div>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-		{% with messages = get_flashed_messages() %}
-			{% if messages %}
-				<ul class=flashes>
-					{% for message in messages %}
-						<p>{{ message }}</p>
-					{% endfor %}
-				</ul>
-			{% endif %}
-		{% endwith %}
-
-				{% block content %} default content {% endblock %}
-        </div>
-      </div>
     </div>
-
-
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
+    <script src='js/bootstrap.min.js'></script>
 </body>
 </html>
