@@ -24,7 +24,14 @@ vagrant ssh
 
 # You should now be in the vagrant VM
 cd /vagrant
-# initialize a database with placeholder categories, items, and images
+
+# The database should be there already when you vagrant up
+# But just in case it isn't, do this:
+psql
+\i catalog.sql
+\q
+
+# fill in the database with placeholder categories, items, and images
 python initialize.py
 
 # start the webserver on http://localhost:5000

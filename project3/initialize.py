@@ -1,4 +1,4 @@
-from project import *
+from project import add_ItemDB, clearDatabase
 # This script will generate some placeholder items for quickly testing
 # excuse my uncreativity
 

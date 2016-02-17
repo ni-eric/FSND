@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, \
-    jsonify
+    jsonify, g
 import random
 import string
 import psycopg2
@@ -149,7 +149,6 @@ def categoryItems(category):
                            categories=getCategories())
 
 
-@app.route('/catalog/<category>/<int:itemid>')
 @app.route('/catalog/<category>/<int:itemid>/<name>')
 def item(itemid, name, category):
     # Item page: item names are not unique
@@ -176,7 +175,6 @@ def categoryItemsJSON(category):
     return jsonify(categoryItems=[serialize(item) for item in nameditems])
 
 
-@app.route('/catalog/<category>/<int:itemid>/JSON')
 @app.route('/catalog/<category>/<int:itemid>/<name>/JSON')
 def itemJSON(itemid, name, category):
     return jsonify(Item=serialize(getItem(itemid)))
@@ -188,7 +186,8 @@ def editItem(itemid, category):
         flash('please login to do that')
         return redirect('/login')
     item = getItem(itemid)
-    newname, newcat, newdesc = item.name, item.category, item.description
+    # leaving a field blank will result in the old value staying there.
+    newname, newcat, newdesc, newimg = item.name, item.category, item.description, item.imgurl
     if(request.method == 'POST'):
         if request.form['name']:
             newname = request.form['name']
@@ -227,7 +226,6 @@ def addItem():
         flash('please login to do that')
         return redirect('/login')
     if(request.method == 'POST'):
-        newname, newcat, newdesc, imgurl = "", "", "", ""
         if request.form['name']:
             newname = request.form['name']
         if request.form['category']:
@@ -236,7 +234,12 @@ def addItem():
             newdesc = request.form['description']
         if request.form['imgurl']:
             newimg = request.form['imgurl']
-        itemid = add_ItemDB(newname, newcat, newdesc, newimg)
+        # all fields are required. check if user filled in all fields
+        try:
+            itemid = add_ItemDB(newname, newcat, newdesc, newimg)
+        except UnboundLocalError:
+            flash('please fill in all fields')
+            return redirect(url_for('addItem'))
         print itemid, newname, newcat
         # redirect to newly created item
         return redirect(url_for('item', itemid=itemid, name=newname,
@@ -338,6 +341,12 @@ def gconnect():
     print "done!"
     return output
 
+@app.before_request
+def load_user():
+    # pass username to a global variable on every request
+    if 'username' in login_session:
+        g.username = login_session["username"]
+
 
 @app.route('/gdisconnect')
 def gdisconnect():
@@ -368,7 +377,6 @@ def gdisconnect():
             'Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
-
 
 @app.route('/')
 @app.route('/catalog')

@@ -20,8 +20,12 @@
                     <li class='active'><a href='{{url_for('catalogHome')}}'>Home</a></li>
                 </ul>
                 <ul class='nav navbar-nav navbar-right'>
+                    {% if not g.username %}
                     <li><a href='{{url_for('login')}}'><span class='glyphicon glyphicon-log-in'></span>Login</a></li>
+                    {% else %}
+                    <li class = 'navbar-brand'>Signed in as {{g.username}}</li>
                     <li><a href='{{url_for('gdisconnect')}}'><span class='glyphicon glyphicon-log-out'></span>Logout</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
