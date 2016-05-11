@@ -92,14 +92,17 @@ class ConnectFourAPI(remote.Service):
         if not IsValidMove(move, game.board):
             raise endpoints.BadRequestException('Invalid move!')
 
+        # Game history is a list of which player put pieces into which column.
+        # Since the list is chronological, a game can be recreated using only
+        # this information.
         if user.key == game.player_1:
             piece = '1'
             game.next_move = game.player_2
-            game.history.append(('1', move))
+            game.history.append((game.player_1, move))
         else:
             piece = '2'
             game.next_move = game.player_1
-            game.history.append(('2', move))
+            game.history.append((game.player_2, move))
 
         makeMove(piece, move, game.board)
 
