@@ -11,7 +11,7 @@ by Eric Ni, in fulfillment of Udacity's [Full-Stack Web Developer Nanodegree](ht
 
 
 ##Game Instructions:
-Connect 4 is a 2-player board game. Players take turn dropping their pieces into a grid. Each piece will occupy the lowest available space in the column chosen. The objective of the game is for a player to connect 4 of their own pieces, either vertically, horizontally, or diagonally. The first player to Connect 4 wins.
+Connect 4 is a 2-player board game. Players take turn dropping their pieces into a grid. Players can choose which column their piece goes into, but not the row. Each piece will occupy the lowest available space in the column chosen. Players cannot pick a column that has been filled with pieces. The objective of the game is for a player to connect 4 of their own pieces, either vertically, horizontally, or diagonally. There is no score to keep track of throughout the game. The first player to Connect 4 wins.
 
 ##Files Included:
  - api.py: Contains endpoints.
