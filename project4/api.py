@@ -98,19 +98,21 @@ class ConnectFourAPI(remote.Service):
         if user.key == game.player_1:
             piece = '1'
             game.next_move = game.player_2
-            game.history.append((game.player_1, move))
+            game.history.append('%s placed piece in column %s' % (str(user.name), move))
         else:
             piece = '2'
             game.next_move = game.player_1
-            game.history.append((game.player_2, move))
+            game.history.append('%s placed piece in column %s' % (str(user.name), move))
 
         makeMove(piece, move, game.board)
 
         winner = check_winner(game.board)
         if not winner and check_full(game.board):
             game.tie_game()
+            game.history.append('game ended in a tie')
         if winner:
             game.end_game(user.key)
+            game.history.append('%s wins the game!' % str(user.name))
         game.put()
         return game.to_form('board updated!')
 
